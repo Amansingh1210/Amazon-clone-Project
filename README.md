@@ -5,3 +5,8 @@ it consist of many functionalities like </br>
 1 . Adding  or deleting items from cart </br>
 2 . Payment page </br>
 3 . Track your product Page  </br>
+</br></br>
+
+<H3>Project Completed</H3>
+Date : 23 Dec 2023
+
