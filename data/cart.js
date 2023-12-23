@@ -57,7 +57,7 @@ export function deleteItem(productId){
     saveToStorage();
 }
 // FUNCTION TO UPADATE DELIVERY OPTIONS 
-export function updateDeliveryOption(productId, deliveryOptionID){
+export function updateDeliveryOption(productId, deliveryOptionId){
     let matchingItem ; 
 
     cart.forEach((cartItem)=>{
@@ -65,8 +65,7 @@ export function updateDeliveryOption(productId, deliveryOptionID){
             matchingItem = cartItem ;
         }
     });
-    matchingItem.deliveryOptionId = deliveryOptionID;
-    
+    matchingItem.deliveryOptionId = deliveryOptionId;
     saveToStorage();
 }
 
