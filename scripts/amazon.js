@@ -58,14 +58,14 @@ products.forEach((product) => {
 document.querySelector(".js-products-grid").innerHTML = productsHTML
 
 // FUNCTION TO UPDATE CART QUANTITY
-export function updateCart(){
+ function updateCart(){
     let cartQuantity = 0 ;
     cart.forEach((cartItem) => {
         cartQuantity += cartItem.quantity
     })
-
     document.querySelector(".js-cart-quantity").innerHTML = cartQuantity
 }
+updateCart();
 
 document.querySelectorAll(".js-add-to-cart").forEach((button)=>{
     button.addEventListener('click',() => {

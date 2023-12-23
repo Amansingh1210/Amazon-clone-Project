@@ -1,8 +1,9 @@
-import { cart , deleteItem} from "../data/cart.js";
+import { cart , deleteItem , updateDeliveryOption} from "../data/cart.js";
 import { products } from "../data/products.js";
 import { priceInRupees } from "./utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { deliveryOptions } from "../data/deliveryOptions.js";
+
 
 let completeCart = '';
 
@@ -16,16 +17,18 @@ cart.forEach((cartItem) => {
         }
     })
 
-    let deliveryOption ;
+    let deliveryOption =[];
     
     const  deliveryOptionID = cartItem.deliveryOptionId;
-  
+    // console.log(deliveryOptionID);
+    
     deliveryOptions.forEach((option)=>{
       if(option.id === deliveryOptionID){
         deliveryOption = option
       }
+      // console.log(option.id);
     });
-    
+    // console.log(deliveryOption);
 
     const today = dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays,'days');
@@ -84,22 +87,25 @@ cart.forEach((cartItem) => {
      const priceSring = deliveryOption.priceCents === 0 ? `Free` : `Rs.${priceInRupees(deliveryOption.priceCents)}-`;
      
      const isChecked =  deliveryOption.id === cartItem.deliveryOptionId ;
+    //  console.log(isChecked);
      
      deliveryHTML += `
-     <div class="delivery-option">
-     <input type="radio" 
-     ${isChecked ? 'checked' : ""} 
-     class="delivery-option-input"
-     name="delivery-option-${matchingProduct.id}">
-     <div>
-     <div class="delivery-option-date">
-     ${dateSring}
-     </div>
-     <div class="delivery-option-price">
-     ${priceSring} - Shipping
-     </div>
-     </div>
-     </div>
+      <div class="delivery-option js-delivery-options"
+        data-product-id="${matchingProduct.id}"
+        data-delivery-option-id="${deliveryOption.id}">
+         <input type="radio" 
+           ${isChecked ? 'checked' : ""} 
+          class="delivery-option-input"
+          name="delivery-option-${matchingProduct.id}">
+       <div>
+          <div class="delivery-option-date">
+             ${dateSring}
+          </div>
+          <div class="delivery-option-price">
+             ${priceSring} - Shipping
+          </div>
+       </div>
+      </div>
      `
    });
    
@@ -116,3 +122,19 @@ document.querySelectorAll(".js-delete-link").forEach((link)=>{
     document.querySelector(`.js-cart-item-container-${productId}`).remove();
   })
 });
+
+let itemQuantity = 0 ;
+cart.forEach((cartItem) => {
+    itemQuantity += cartItem.quantity
+  })
+document.querySelector(".js-item-quantity").innerHTML = itemQuantity+ " items" ; 
+
+
+document.querySelectorAll(".js-delivery-options").forEach((element)=>
+{
+  element.addEventListener('click',()=>{
+    const {productId , deliveryOptionID} = element.dataset ;
+    updateDeliveryOption(productId , deliveryOptionID);
+
+  })
+})
