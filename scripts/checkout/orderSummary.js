@@ -1,8 +1,9 @@
 import { cart , deleteItem , updateDeliveryOption} from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products , getProduct} from "../../data/products.js";
 import { priceInRupees } from "../utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { deliveryOptions } from "../../data/deliveryOptions.js";
+import { deliveryOptions, getDeliveryOption} from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./payment.js";
 
 
 
@@ -13,22 +14,12 @@ let completeCart = '';
 cart.forEach((cartItem) => {
     const productId = cartItem.productId ; 
 
-    let matchingProduct ; 
-    products.forEach((product) =>{
-        if(product.id === productId){
-            matchingProduct = product ; 
-        }
-    })
-    let deliveryOption =[];
-    const  deliveryOptionID = cartItem.deliveryOptionId;
-    // console.log(deliveryOptionID);
-    deliveryOptions.forEach((option)=>{
-      if(option.id === deliveryOptionID){
-        deliveryOption = option
-      }
-      // console.log(option.id);
-    });
-    // console.log(deliveryOption);
+    const matchingProduct = getProduct(productId);
+
+    const  deliveryOptionId = cartItem.deliveryOptionId;
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
+    
+
     const today = dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays,'days');
     const dateSring = deliveryDate.format('dddd,MMMM D')
@@ -134,6 +125,7 @@ document.querySelectorAll(".js-delivery-options").forEach((element)=>
     const {productId , deliveryOptionId} = element.dataset ;
     updateDeliveryOption(productId , deliveryOptionId);
     renderOrderSummary(); 
+    renderPaymentSummary();
   })
 });
 
